@@ -45,7 +45,7 @@ class SearchFragment : Fragment() {
 
         val textView: TextView = binding.textSearch
         searchViewModel.text.observe(viewLifecycleOwner, Observer {
-            textView.text = it
+            //textView.text = it
         })
 
         //DataClassからエンティティリスト呼び出し

@@ -2,17 +2,40 @@
     <string name="app_name">My Application</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="nav_header_title">楽曲検索アプリ</string>
+    <string name="nav_header_title">MusicBrainzでシェアアプリ</string>
     <string name="nav_header_subtitle">musicbrainz api</string>
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">設定</string>
 
     <string name="menu_home">ホーム</string>
     <string name="menu_search">サーチ</string>
-    <string name="menu_slideshow">Slideshow</string>
+    <string name="menu_slideshow">スライドショー(test)</string>
 
     <string name="search_button">検索する</string>
+    <string name="history_button">履歴を見る</string>
+    <string name="audio_icon_desc">Icon</string>
 
+    <string name="search_text">検索</string>
+    <string name="search_check_text"> で検索</string>
+    <string name="ENTITY_TYPE">ENTITY_TYPE</string>
+    <string name="search_view_hint">検索するワードを入力...</string>
+
+    <string name="jsonErrorMessage">JSONを取得できませんでした</string>
+    
+    <string name="back_button_text">＜ 戻る</string>
+    <string name="forward_button_text">進む ＞</string>
+    
+    <string name="share">共有</string>
+    <string name="cancel">キャンセル</string>
+
+    <string name="share_button_text">URLを共有する</string>
+
+    <string name="shareDialogTitleText">共有するURLを選んでください</string>
+    <string name="shareDialogErrorMessage">一つ以上選択してください</string>
+    <string name="shareDialogCancelMessage">キャンセルしました</string>
+    
+    <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
+    
     <string name="preference_file_key">DataStore</string>
 
     <string name="entity">entity</string>
@@ -23,13 +46,15 @@
     <string name="displayed_result_num">display_result_num</string>
     <string name="api_history">history</string>
 
+    <string name="inc_artist">releases+url-rels</string>
+
     <string name="entitys_position">entitys_position</string>
-
-    <string name="back_button_text">＜ 戻る</string>
-    <string name="forward_button_text">進む ＞</string>
-
+    
     <string name="display_search">search</string>
     <string name="display_lookup">lookup</string>
 
+    <string name="mbid">MBID</string>
     <string name="API_URL">APIURL</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

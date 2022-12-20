@@ -14,7 +14,7 @@
             android:title="@string/menu_search" />
         <item
             android:id="@+id/nav_slideshow"
-            android:icon="@drawable/ic_menu_slideshow"
+            android:icon="@drawable/ic_baseline_library_books_24"
             android:title="@string/menu_slideshow" />
     </group>
 </menu>
