@@ -169,7 +169,7 @@ class ResultFragment : Fragment() {
         lifecycleScope.launch {
             val result = apiBackGroundTask(mburl)
             if (display_str == getString(R.string.display_search)) {
-                if (entity == "1artist") { apiJsonTaskSearchArtist(result)
+                if (entity == "artist") { apiJsonTaskSearchArtist(result)
                 //} else if (entity == "release") { apiJsonTaskSearchRelease(result)
                 //} else if (entity == "recording") { apiJsonTaskSearchRecording(result)
                 //} else if (entity == "event") { apiJsonTaskSearch(result)
