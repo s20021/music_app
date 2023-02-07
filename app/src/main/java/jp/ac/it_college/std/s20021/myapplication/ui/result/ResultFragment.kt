@@ -159,7 +159,6 @@ class ResultFragment : Fragment() {
             .edit().putString(getString(R.string.API_URL), "")
     }
 
-
 //---------------------------------------------------------------------------------------------------
     //apiの取得、処理
     private fun apiTask(mburl: String, display_str: String, entity: String) {
@@ -168,10 +167,13 @@ class ResultFragment : Fragment() {
 
         lifecycleScope.launch {
             val result = apiBackGroundTask(mburl)
+            if (errorCheck(result)) {
+                historyAdd(mburl)
+            }
             if (display_str == getString(R.string.display_search)) {
                 if (entity == "artist") { apiJsonTaskSearchArtist(result)
-                //} else if (entity == "release") { apiJsonTaskSearchRelease(result)
-                //} else if (entity == "recording") { apiJsonTaskSearchRecording(result)
+                } else if (entity == "release") { apiJsonTaskSearchRelease(result)
+                } else if (entity == "recording") { apiJsonTaskSearchRecording(result)
                 //} else if (entity == "event") { apiJsonTaskSearch(result)
                 } else { apiJsonTaskSearchTest(result) }
             } else if (display_str == getString(R.string.display_lookup)) {
@@ -181,6 +183,48 @@ class ResultFragment : Fragment() {
             }
             binding.progressBar.visibility = android.widget.ProgressBar.INVISIBLE
         }
+    }
+
+    //エラーチェック
+    private fun errorCheck(result: String) : Boolean {
+        //エラーチェック
+        if (result == "") {
+            return false
+        }
+
+        //受け取ったデータをjsonオブジェクトに
+        val jsonObj = JSONObject(result)
+
+        //jsonのkeyをリストに
+        val jsonKeys: MutableList<String> = mutableListOf<String>()
+        for (i in jsonObj.keys()) {
+            jsonKeys.add(i.toString())
+        }
+
+        //エラーチェック
+        if (jsonKeys.contains("error") || jsonKeys.contains("help")) {
+            return false
+        }
+
+        return true
+    }
+
+    private fun historyAdd(url : String) {
+        val sharedPref = activity?.getSharedPreferences(
+            getString(R.string.preference_file_key), Context.MODE_PRIVATE)!!
+
+        val sHistory = sharedPref.getString(getString(R.string.api_history), "")
+        val jHistory = JSONArray(sHistory)
+        val historyList = mutableListOf<String>()
+        for (i in 0..jHistory.length()-1){
+            historyList.add(jHistory.getString(i))
+        }
+        historyList.add(url)
+        val jHList = JSONArray(historyList)
+        val sHList = jHList.toString()
+
+        //保存
+        sharedPref.edit().putString(getString(R.string.api_history), sHList).commit()
     }
 
     //jsonの取得
@@ -471,6 +515,50 @@ class ResultFragment : Fragment() {
             binding.resultText.text =
                 "計${json_count}件中　${json_offset + 1}～${json_offset + listLength}件まで表示中　表示件数:${listLength}"
         }
+
+        fun listSet(slist: MutableList<String>, gkey: String) {
+            for (i in resultList) {
+                var resultKeys = mutableListOf<String>()
+                for (k in i.keys()) { resultKeys.add(k.toString()) }
+
+                if (resultKeys.contains(gkey)) {
+                    slist.add(i[gkey].toString())
+                } else {
+                    slist.add("")
+                }
+            }
+        }
+
+
+        fun scoreListSet(sList: MutableList<String>, gkey: String = "score") {
+            for (i in resultList) {
+                val resultKeys = mutableListOf<String>()
+                for (k in i.keys()) { resultKeys.add(k.toString()) }
+
+                if (resultKeys.contains(gkey)) {
+                    sList.add(i[gkey].toString().padStart(3, '0'))
+                } else {
+                    sList.add("".padStart(3, ' '))
+                }
+            }
+        }
+
+        //"score"list生成
+        val scoreList: MutableList<String> = mutableListOf()
+        scoreListSet(scoreList)
+
+        //ボタンの表示設定
+        searchForBacButtonSetting(json_count, json_offset, listLength)
+
+        //listviewを設定
+        val listView: ListView = binding.apiResultList
+        val adapter = ArrayAdapter(
+            requireContext(),
+            android.R.layout.simple_list_item_1,
+            resultList
+        )
+        listView.adapter = adapter
+        listView.isEnabled = true
     }
     //レコーディング
     private fun apiJsonTaskSearchRecording(result: String) {
@@ -725,10 +813,12 @@ class ResultFragment : Fragment() {
                 sharedPref.getString(getString(R.string.entity), "").toString(),
                 mbidList[position]
             )
+
             sharedPref.edit().putString(
                 getString(R.string.display),
                 getString(R.string.display_lookup)
             ).commit()
+
             apiTask(
                 lookUpUrl,
                 sharedPref.getString(getString(R.string.display), "").toString(),
@@ -975,43 +1065,6 @@ class ResultFragment : Fragment() {
             //リストのタップ不可
             listView.isEnabled = false
             binding.resultText.text = releaseIdList[position]
-
-            val bools = mutableListOf<Boolean>()
-            for (i in 1..relationsList.length()) { bools.add(false) }
-            val multiChoiceBools = bools.toBooleanArray()
-
-            //ダイアログ生成
-            /**
-            val dialog: AlertDialog = activity.let {
-                val builder = AlertDialog.Builder(it)
-                builder.apply {
-                    setTitle("")
-                    setMultiChoiceItems(relationsUrl.toTypedArray(), null, { dialog, which, isChecked ->
-                        multiChoiceBools[which] = !multiChoiceBools[which]
-                    })
-                    setPositiveButton("共有", { dialog, id ->
-                        //共有する文字列
-                        var shareText = jsonObj.getString("name") + "\n"
-                        for (i in 0..relationsList.length()-1) {
-                            if (multiChoiceBools[i]){
-                                shareText = shareText + "\n${relationsName[i]}: ${relationsUrl[i]}"
-                            }
-                        }
-                        val share: Intent = Intent().apply {
-                            action = Intent.ACTION_SEND
-                            putExtra(Intent.EXTRA_TEXT, shareText)
-                            type = "text/plain"
-                        }
-                        startActivity(share)
-                    })
-                    setNegativeButton("戻る", { dialog, id ->
-                    })
-                }
-                listView.isEnabled = true
-                builder.create()
-            }
-            dialog.show()
-            */
 
             shareDialogShow(jsonObj.getString("name"), relationsUrl, relationsName)
 

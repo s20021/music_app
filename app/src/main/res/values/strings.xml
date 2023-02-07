@@ -33,6 +33,8 @@
     <string name="shareDialogTitleText">共有するURLを選んでください</string>
     <string name="shareDialogErrorMessage">一つ以上選択してください</string>
     <string name="shareDialogCancelMessage">キャンセルしました</string>
+
+    <string name="history_text">履歴</string>
     
     <!-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -->
     

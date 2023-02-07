@@ -55,6 +55,11 @@ class HomeFragment : Fragment() {
         button.setOnClickListener{
             navController.navigate(R.id.action_nav_home_to_nav_search)
         }
+
+        val historyButton = view.findViewById<Button>(R.id.history_button)
+        historyButton.setOnClickListener{
+            navController.navigate(R.id.action_nav_home_to_nav_slideshow)
+        }
     }
 
     override fun onDestroyView() {

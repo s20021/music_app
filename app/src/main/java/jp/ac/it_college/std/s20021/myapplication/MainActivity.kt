@@ -25,6 +25,7 @@ import jp.ac.it_college.std.s20021.myapplication.databinding.ActivityMainBinding
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.json.JSONArray
 import org.json.JSONException
 import org.json.JSONObject
 import java.io.BufferedReader
@@ -59,11 +60,15 @@ class MainActivity : AppCompatActivity() {
 
         if (sharedPref.getInt(getString(R.string.displayed_result_num), 0) <= 0){
             sharedPref.edit().putInt(
-                getString(R.string.displayed_result_num), DataClass().get_displayed_default())
+                getString(R.string.displayed_result_num), DataClass().get_displayed_default()
+            ).commit()
         }
 
-        if (sharedPref.getString(getString(R.string.api_history), "") == ""){
-            arrayListOf<Map<String, String>>()
+        if (sharedPref.getString(getString(R.string.api_history), "Null") == "Null"){
+            val testMList = mutableListOf<String>()
+            sharedPref.edit().putString(
+                getString(R.string.api_history), JSONArray(testMList).toString()
+            ).commit()
         }
 
         //シェアボタン設定
