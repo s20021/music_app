@@ -14,9 +14,6 @@ url: https://musicbrainz.org/
 ・動作環境
 android11以上
 
-・メールアドレス
-s20021@std.it-college.ac.jp
-
 
 
 
